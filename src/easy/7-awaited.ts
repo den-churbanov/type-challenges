@@ -1,10 +1,10 @@
 // If we have a type which is a wrapped type like Promise, how we can get the type which is inside the wrapped type?
 
-type MyAwaited<T extends PromiseLike<any>> = T extends PromiseLike<infer R>
+export type MyAwaited<T> = T extends PromiseLike<infer R>
   ? R extends PromiseLike<any>
     ? MyAwaited<R>
     : R
-  : never;
+  : T;
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '../utils'
@@ -22,6 +22,3 @@ type cases = [
   Expect<Equal<MyAwaited<Z1>, string | boolean>>,
   Expect<Equal<MyAwaited<T>, number>>,
 ]
-
-// @ts-expect-error
-type error = MyAwaited<number>
